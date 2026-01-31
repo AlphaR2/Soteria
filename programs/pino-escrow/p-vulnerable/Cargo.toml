@@ -1,0 +1,27 @@
+[package]
+name = "p-vulnerable"
+version = "0.1.0"
+description = "Vulnerable Pinocchio Escrow Program (Educational)"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[dependencies]
+pinocchio.workspace = true
+pinocchio-associated-token-account.workspace = true
+pinocchio-log.workspace = true
+pinocchio-system.workspace = true
+pinocchio-token.workspace = true
+solana-address.workspace = true
+spl-associated-token-account.workspace = true
+spl-token.workspace = true
+
+[dev-dependencies]
+litesvm.workspace = true
+litesvm-token.workspace = true
+solana-sdk.workspace = true
+solana-system-interface.workspace = true
+
+[lints]
+workspace = true

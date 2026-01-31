@@ -1,0 +1,37 @@
+[package]
+name = "amm-secure"
+version = "0.1.0"
+description = "Secure AMM (Automated Market Maker) Program"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "amm_secure"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build"]
+anchor-debug = []
+custom-heap = []
+custom-panic = []
+
+[dependencies]
+anchor-lang.workspace = true
+anchor-spl.workspace = true
+constant-product-curve.workspace = true
+spl-associated-token-account.workspace = true
+spl-token.workspace = true
+
+[dev-dependencies]
+litesvm.workspace = true
+litesvm-token.workspace = true
+solana-sdk.workspace = true
+borsh.workspace = true
+solana-system-interface.workspace = true
+
+[lints]
+workspace = true

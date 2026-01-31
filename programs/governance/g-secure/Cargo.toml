@@ -1,0 +1,33 @@
+[package]
+name = "g-secure"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "governance_secure"
+path = "src/lib.rs"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+anchor-debug = []
+custom-panic = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build"]
+
+[dependencies]
+anchor-lang.workspace = true
+anchor-spl.workspace = true
+
+[dev-dependencies]
+litesvm.workspace = true
+solana-sdk.workspace = true
+sha2.workspace = true
+solana-system-interface.workspace = true
+
+[lints]
+workspace = true
