@@ -1,6 +1,6 @@
 # **Soteria - A Solana program Security implementation**
 
-Repository demonstrating critical security vulnerabilities in Solana programs through 6 production-grade examples\*\*.
+Repository demonstrating critical security vulnerabilities in Solana programs through 6 production-grade examples.
 
 ---
 
@@ -10,12 +10,19 @@ Each program contains **vulnerable** and **secure** implementations with real ex
 
 **Programs:**
 
-1. **Escrow** (Pinocchio) - P2P token swap
-2. **DAO Governance** (Pinocchio) - Voting & proposals
-3. **Vault** (Anchor) - Token staking
-4. **AMM** (Anchor) - Constant product DEX
-5. **Lending** (Anchor) - Collateralized loans
-6. **NFT Minting** (Anchor) - On-chain minting with Metaplex
+1. **Escrow** (Pinocchio)
+2. **DAO Governance** (Anchor)
+3. **Multisig** (Anchor) 
+4. **AMM** (Anchor) 
+5. **NFT Minting** (Anchor) - On-chain minting with Metaplex Core
+
+
+**Coming Soon:**
+
+1. **DAO Governance** (Pinocchio) - Voting & proposals
+2. **Lending** (Anchor) - Collateralized loans
+3. ..more
+
 
 ---
 
@@ -27,23 +34,11 @@ All vulnerabilities are classified using this standard:
 
 Bugs that cause **direct loss of funds** with minimal setup. Attacker can trigger with little preparation or even accidentally. Effects are difficult to undo after detection.
 
-**Examples:**
-
-- Missing signer checks (anyone can withdraw)
-- Account ownership not validated (fake accounts accepted)
-- CPI to arbitrary programs (fund drainage)
-  ...and more
-
 ---
 
 ### **HIGH**
 
 Bugs that enable **loss of funds with preparation**, or render the contract unusable/DOS(Or in a locked-out state).
-
-**Examples:**
-
-- Integer overflow in calculations
-- No circuit breaker (My own words for poor admin setup where admin can't pause during emergency)
 
 ---
 
@@ -51,20 +46,11 @@ Bugs that enable **loss of funds with preparation**, or render the contract unus
 
 Bugs that don't cause direct fund loss but **lead to exploitable mechanisms**.
 
-**Examples:**
-
-- Missing discriminator checks (type confusion)
-- Improper time-based validation
-
 ---
 
 ### **LOW**
 
 Bugs with **no significant immediate impact**, easily fixed after detection. This can also include wrong decisions in code, not harmful, just best practices
-
-**Examples:**
-
-- Poor code organization
 
 ---
 
@@ -79,7 +65,7 @@ programs/
 │   ├── secure/               # Shows fixes
 │   └── README.md             # Vulnerabilities explained
 │
-├── pino-dao/                 # Pinocchio implementation
+├── governance/                 # Pinocchio implementation
 │   ├── vulnerable/
 │   ├── secure/
 │   └── README.md
