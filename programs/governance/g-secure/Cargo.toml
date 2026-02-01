@@ -1,5 +1,5 @@
 [package]
-name = "g-secure"
+name = "governance-secure"
 version = "0.1.0"
 description = "Created with Anchor"
 edition = "2021"
@@ -22,12 +22,17 @@ idl-build = ["anchor-lang/idl-build"]
 [dependencies]
 anchor-lang.workspace = true
 anchor-spl.workspace = true
+spl-associated-token-account.workspace = true
 
 [dev-dependencies]
 litesvm.workspace = true
+litesvm-token.workspace = true
 solana-sdk.workspace = true
 sha2.workspace = true
 solana-system-interface.workspace = true
+spl-token.workspace = true
+spl-associated-token-account.workspace = true
 
-[lints]
-workspace = true
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }

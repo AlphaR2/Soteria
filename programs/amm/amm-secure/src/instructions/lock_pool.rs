@@ -18,7 +18,7 @@ pub struct LockPool<'info> {
         ],
         bump = pool_config.config_bump,
     )]
-    pub pool_config: Account<'info, PoolConfig>,
+    pub pool_config: Box<Account<'info, PoolConfig>>,
 }
 
 impl<'info> LockPool<'info> {

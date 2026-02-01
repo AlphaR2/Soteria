@@ -210,12 +210,14 @@ show_main_menu() {
 
     echo -e "${BOLD}Main Menu${NC}"
     echo ""
-    echo -e "  ${CYAN}1${NC} │ ${BOLD}Escrow (Pinocchio)${NC}       ${DIM}Cross-program invocation tests${NC}"
-    echo -e "  ${CYAN}2${NC} │ ${BOLD}Multisig${NC}                 ${DIM}Multi-signature wallet tests${NC}"
-    echo -e "  ${CYAN}3${NC} │ ${BOLD}NFT Staking${NC}              ${DIM}NFT staking & rewards tests${NC}"
+    echo -e "  ${CYAN}1${NC} │ ${BOLD}Multisig${NC}                 ${DIM}Multi-signature wallet tests${NC}"
+    echo -e "  ${CYAN}2${NC} │ ${BOLD}Governance${NC}               ${DIM}Reputation-based DAO tests${NC}"
+    echo -e "  ${CYAN}3${NC} │ ${BOLD}AMM${NC}                      ${DIM}Automated Market Maker tests${NC}"
+    echo -e "  ${CYAN}4${NC} │ ${BOLD}Escrow (Pinocchio)${NC}       ${DIM}Atomic swap escrow tests${NC}"
+    echo -e "  ${CYAN}5${NC} │ ${BOLD}NFT Minting${NC}              ${DIM}NFT minting & Metaplex tests${NC}"
     echo -e "  ${BLUE}──┼$( printf '%.0s─' {1..60} )${NC}"
-    echo -e "  ${CYAN}4${NC} │ ${BOLD}Run All Tests${NC}            ${DIM}Execute all test suites${NC}"
-    echo -e "  ${CYAN}5${NC} │ ${BOLD}Build Programs${NC}           ${DIM}Compile Solana programs${NC}"
+    echo -e "  ${CYAN}6${NC} │ ${BOLD}Run All Tests${NC}            ${DIM}Execute all test suites${NC}"
+    echo -e "  ${CYAN}7${NC} │ ${BOLD}Build Programs${NC}           ${DIM}Compile Solana programs${NC}"
     echo -e "  ${BLUE}──┼$( printf '%.0s─' {1..60} )${NC}"
     echo -e "  ${RED}0${NC} │ ${BOLD}Exit${NC}"
     echo ""
@@ -261,14 +263,18 @@ show_build_menu() {
 
     echo -e "${BOLD}Select Program to Build${NC}"
     echo ""
-    echo -e "  ${GREEN}1${NC} │ Escrow       ${BOLD}Secure${NC}      ${DIM}programs/pino-escrow/p-secure${NC}"
-    echo -e "  ${RED}2${NC} │ Escrow       ${BOLD}Vulnerable${NC}  ${DIM}programs/pino-escrow/p-vulnerable${NC}"
-    echo -e "  ${GREEN}3${NC} │ Multisig     ${BOLD}Secure${NC}      ${DIM}programs/multisig/m-secure${NC}"
-    echo -e "  ${RED}4${NC} │ Multisig     ${BOLD}Vulnerable${NC}  ${DIM}programs/multisig/m-vulnerable${NC}"
-    echo -e "  ${GREEN}5${NC} │ NFT Staking  ${BOLD}Secure${NC}      ${DIM}programs/nfts/n-secure${NC}"
-    echo -e "  ${RED}6${NC} │ NFT Staking  ${BOLD}Vulnerable${NC}  ${DIM}programs/nfts/n-vulnerable${NC}"
+    echo -e "  ${GREEN}1${NC} │ Multisig     ${BOLD}Secure${NC}      ${DIM}programs/multisig/m-secure${NC}"
+    echo -e "  ${RED}2${NC} │ Multisig     ${BOLD}Vulnerable${NC}  ${DIM}programs/multisig/m-vulnerable${NC}"
+    echo -e "  ${GREEN}3${NC} │ Governance   ${BOLD}Secure${NC}      ${DIM}programs/governance/g-secure${NC}"
+    echo -e "  ${RED}4${NC} │ Governance   ${BOLD}Vulnerable${NC}  ${DIM}programs/governance/g-vulnerable${NC}"
+    echo -e "  ${GREEN}5${NC} │ AMM          ${BOLD}Secure${NC}      ${DIM}programs/amm/amm-secure${NC}"
+    echo -e "  ${RED}6${NC} │ AMM          ${BOLD}Vulnerable${NC}  ${DIM}programs/amm/amm-vulnerable${NC}"
+    echo -e "  ${GREEN}7${NC} │ Escrow       ${BOLD}Secure${NC}      ${DIM}programs/pino-escrow/p-secure${NC}"
+    echo -e "  ${RED}8${NC} │ Escrow       ${BOLD}Vulnerable${NC}  ${DIM}programs/pino-escrow/p-vulnerable${NC}"
+    echo -e "  ${GREEN}9${NC} │ NFT Minting  ${BOLD}Secure${NC}      ${DIM}programs/nfts/n-secure${NC}"
+    echo -e "  ${RED}10${NC}│ NFT Minting  ${BOLD}Vulnerable${NC}  ${DIM}programs/nfts/n-vulnerable${NC}"
     echo -e "  ${BLUE}──┼$( printf '%.0s─' {1..60} )${NC}"
-    echo -e "  ${MAGENTA}A${NC} │ ${BOLD}Build All Programs${NC}  ${DIM}Sequential build (6 programs)${NC}"
+    echo -e "  ${MAGENTA}A${NC} │ ${BOLD}Build All Programs${NC}  ${DIM}Sequential build (10 programs)${NC}"
     echo -e "  ${BLUE}──┼$( printf '%.0s─' {1..60} )${NC}"
     echo -e "  ${YELLOW}0${NC} │ ${BOLD}Back to Main Menu${NC}"
     echo ""
@@ -283,16 +289,20 @@ handle_build() {
         echo ""
 
         case $build_choice in
-            1) build_program "pino-escrow" "p-secure";;
-            2) build_program "pino-escrow" "p-vulnerable";;
-            3) build_program "multisig" "m-secure";;
-            4) build_program "multisig" "m-vulnerable";;
-            5) build_program "nfts" "n-secure";;
-            6) build_program "nfts" "n-vulnerable";;
+            1) build_program "multisig" "m-secure";;
+            2) build_program "multisig" "m-vulnerable";;
+            3) build_program "governance" "g-secure";;
+            4) build_program "governance" "g-vulnerable";;
+            5) build_program "amm" "amm-secure";;
+            6) build_program "amm" "amm-vulnerable";;
+            7) build_program "pino-escrow" "p-secure";;
+            8) build_program "pino-escrow" "p-vulnerable";;
+            9) build_program "nfts" "n-secure";;
+            10) build_program "nfts" "n-vulnerable";;
             a|A)
                 print_section "Building All Programs"
                 echo ""
-                local programs=("pino-escrow:p-secure" "pino-escrow:p-vulnerable" "multisig:m-secure" "multisig:m-vulnerable" "nfts:n-secure" "nfts:n-vulnerable")
+                local programs=("multisig:m-secure" "multisig:m-vulnerable" "governance:g-secure" "governance:g-vulnerable" "amm:amm-secure" "amm:amm-vulnerable" "pino-escrow:p-secure" "pino-escrow:p-vulnerable" "nfts:n-secure" "nfts:n-vulnerable")
                 local total=${#programs[@]}
                 local current=0
 
@@ -383,10 +393,14 @@ run_all() {
     echo ""
 
     local tests=(
-        "pino-escrow:p-secure:Escrow Secure"
-        "pino-escrow:p-vulnerable:Escrow Vulnerable"
         "multisig:m-secure:Multisig Secure"
         "multisig:m-vulnerable:Multisig Vulnerable"
+        "governance:g-secure:Governance Secure"
+        "governance:g-vulnerable:Governance Vulnerable"
+        "amm:amm-secure:AMM Secure"
+        "amm:amm-vulnerable:AMM Vulnerable"
+        "pino-escrow:p-secure:Escrow Secure"
+        "pino-escrow:p-vulnerable:Escrow Vulnerable"
         "nfts:n-secure:NFT Secure"
         "nfts:n-vulnerable:NFT Vulnerable"
     )
@@ -422,11 +436,13 @@ main() {
         echo ""
 
         case $choice in
-            1) handle_program_tests "pino-escrow" "p-secure" "p-vulnerable" "Pino Escrow" "4" "4" ;;
-            2) handle_program_tests "multisig" "m-secure" "m-vulnerable" "Multisig" "14" "5" ;;
-            3) handle_program_tests "nfts" "n-secure" "n-vulnerable" "NFT Staking" "TBD" "TBD" ;;
-            4) run_all ;;
-            5) handle_build ;;
+            1) handle_program_tests "multisig" "m-secure" "m-vulnerable" "Multisig" "4" "4" ;;
+            2) handle_program_tests "governance" "g-secure" "g-vulnerable" "Governance" "5" "6" ;;
+            3) handle_program_tests "amm" "amm-secure" "amm-vulnerable" "AMM" "5" "7" ;;
+            4) handle_program_tests "pino-escrow" "p-secure" "p-vulnerable" "Pino Escrow" "TBD" "TBD" ;;
+            5) handle_program_tests "nfts" "n-secure" "n-vulnerable" "NFT Minting" "TBD" "TBD" ;;
+            6) run_all ;;
+            7) handle_build ;;
             0)
                 clear
                 echo ""

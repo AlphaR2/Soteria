@@ -25,7 +25,7 @@ pub struct SwapTokens<'info> {
         ],
         bump = pool_config.config_bump,
     )]
-    pub pool_config: Account<'info, PoolConfig>,
+    pub pool_config: Box<Account<'info, PoolConfig>>,
 
     /// CHECK: PDA signer
     #[account(
@@ -35,10 +35,10 @@ pub struct SwapTokens<'info> {
     pub pool_authority: UncheckedAccount<'info>,
 
     #[account(address = pool_config.token_a_mint)]
-    pub token_a_mint: Account<'info, Mint>,
+    pub token_a_mint: Box<Account<'info, Mint>>,
 
     #[account(address = pool_config.token_b_mint)]
-    pub token_b_mint: Account<'info, Mint>,
+    pub token_b_mint: Box<Account<'info, Mint>>,
 
     #[account(
         init_if_needed,
@@ -46,7 +46,7 @@ pub struct SwapTokens<'info> {
         associated_token::mint = token_a_mint,
         associated_token::authority = swapper,
     )]
-    pub swapper_token_a: Account<'info, TokenAccount>,
+    pub swapper_token_a: Box<Account<'info, TokenAccount>>,
 
     #[account(
         init_if_needed,
@@ -54,21 +54,21 @@ pub struct SwapTokens<'info> {
         associated_token::mint = token_b_mint,
         associated_token::authority = swapper,
     )]
-    pub swapper_token_b: Account<'info, TokenAccount>,
+    pub swapper_token_b: Box<Account<'info, TokenAccount>>,
 
     #[account(
         mut,
         token::mint = token_a_mint,
         token::authority = pool_authority,
     )]
-    pub token_a_vault: Account<'info, TokenAccount>,
+    pub token_a_vault: Box<Account<'info, TokenAccount>>,
 
     #[account(
         mut,
         token::mint = token_b_mint,
         token::authority = pool_authority,
     )]
-    pub token_b_vault: Account<'info, TokenAccount>,
+    pub token_b_vault: Box<Account<'info, TokenAccount>>,
 
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,

@@ -520,12 +520,6 @@ The "vulnerable" implementations in this repository are **intentionally insecure
 
 ---
 
-**Last Updated:** January 2026  
-**Maintainer:** Steve (AlphaR)  
-**License:** MIT
-
----
-
 ## **Appendix: Severity Classification Details**
 
 ### **CRITICAL (🔴)**

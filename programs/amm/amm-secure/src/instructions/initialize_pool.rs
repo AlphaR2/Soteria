@@ -15,8 +15,8 @@ pub struct InitializePool<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
 
-    pub token_a_mint: Account<'info, Mint>,
-    pub token_b_mint: Account<'info, Mint>,
+    pub token_a_mint: Box<Account<'info, Mint>>,
+    pub token_b_mint: Box<Account<'info, Mint>>,
 
     #[account(
         init,
@@ -29,7 +29,7 @@ pub struct InitializePool<'info> {
         ],
         bump
     )]
-    pub pool_config: Account<'info, PoolConfig>,
+    pub pool_config: Box<Account<'info, PoolConfig>>,
 
     /// CHECK: PDA signer for vault operations
     #[account(
@@ -46,7 +46,7 @@ pub struct InitializePool<'info> {
         mint::decimals = 9,
         mint::authority = pool_authority,
     )]
-    pub lp_token_mint: Account<'info, Mint>,
+    pub lp_token_mint: Box<Account<'info, Mint>>,
 
     #[account(
         init,
@@ -54,7 +54,7 @@ pub struct InitializePool<'info> {
         associated_token::mint = token_a_mint,
         associated_token::authority = pool_authority,
     )]
-    pub token_a_vault: Account<'info, TokenAccount>,
+    pub token_a_vault: Box<Account<'info, TokenAccount>>,
 
     #[account(
         init,
@@ -62,7 +62,7 @@ pub struct InitializePool<'info> {
         associated_token::mint = token_b_mint,
         associated_token::authority = pool_authority,
     )]
-    pub token_b_vault: Account<'info, TokenAccount>,
+    pub token_b_vault: Box<Account<'info, TokenAccount>>,
 
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,

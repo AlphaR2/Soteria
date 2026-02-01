@@ -7,10 +7,10 @@ use anchor_lang::prelude::*;
 
 pub use constants::*;
 pub use instructions::*;
-pub use error::*;
+pub use errors::*;
 pub use state::*;
 
-declare_id!("9UC6cDrdT2VRG6BjVX62xpfif4dXzdVhwRZBLVJScmVn");
+declare_id!("5TwUNSWhJ4AwYNnaP5APZyxBXW4usurdbfkCQCCRfAMP");
 
 
 #[program]

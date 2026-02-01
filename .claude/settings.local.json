@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo build-sbf:*)",
+      "Bash(cargo check:*)",
+      "Bash(CARGO_INCREMENTAL=0 cargo check:*)",
+      "Bash(wsl bash -c \"cd /home/alphar/solana/Soteria/programs/governance/g-secure && CARGO_INCREMENTAL=0 cargo build-sbf 2>&1 | tail -10\")",
+      "Bash(anchor build:*)",
+      "Bash(cargo test:*)"
+    ]
+  }
+}

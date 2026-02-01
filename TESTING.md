@@ -1,292 +1,428 @@
 # Testing Guide
 
-This guide explains how to run tests for the Soteria security demonstration programs.
+Complete guide for running tests in the Soteria security education repository.
 
-## Quick Start
+---
 
-### Using the Interactive Test Runner (Recommended)
+## **Quick Start (Recommended)**
 
-We provide interactive test runners that make it easy to run tests without remembering commands.
+### **Interactive Test Runner**
 
-#### Option 1: Bash Script (Linux/WSL/Mac)
+The easiest way to build and test all programs:
 
 ```bash
-# Make the script executable
+# Make executable (first time only)
 chmod +x test-runner.sh
 
-# Run the script
+# Launch interactive menu
 ./test-runner.sh
 ```
 
-#### Option 2: Python Script (Cross-platform)
-
-```bash
-# Run with Python 3
-python3 test-runner.py
-```
-
-Both scripts provide an interactive menu where you can:
-- Select which program to test (Escrow, Multisig, NFTs)
-- Choose secure or vulnerable version
-- Run all tests or specific tests
-- Build all programs at once
-- Run all tests across all programs
+**Features:**
+- Build individual programs or all at once
+- Run secure tests (exploits prevented)
+- Run vulnerable tests (attacks succeed)
+- Execute all test suites sequentially
+- Color-coded output with progress bars
+- Test counts and timing information
 
 ---
 
-## Manual Testing
+## **Test Runner Menu Options**
 
-If you prefer to run tests manually, use the following commands:
+### **Main Menu**
 
-### Pino Escrow
+```
+Main Menu
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-#### Secure Version
-```bash
-cd programs/pino-escrow/p-secure
-
-# Build
-cargo build-sbf
-
-# Run all tests
-cargo test -- --nocapture
-
-# Run specific test
-cargo test test_complete_escrow -- --nocapture
+  1 │ Multisig                 Multi-signature wallet tests
+  2 │ Governance               Reputation-based DAO tests
+  3 │ AMM                      Automated Market Maker tests
+  4 │ Escrow (Pinocchio)       Atomic swap escrow tests
+  5 │ NFT Minting              NFT minting & Metaplex tests
+  ──┼────────────────────────────────────────────────────────
+  6 │ Run All Tests            Execute all test suites
+  7 │ Build Programs           Compile Solana programs
+  ──┼────────────────────────────────────────────────────────
+  0 │ Exit
 ```
 
-Available secure tests:
-- `test_complete_escrow` - Full escrow flow
-- `test_missing_recipient` - Validates recipient presence
-- `test_wrong_token` - Validates token types
-- `test_deposit_amounts` - Validates deposit amounts
+### **Program Test Menu (Example: AMM)**
 
-#### Vulnerable Version
-```bash
-cd programs/pino-escrow/p-vulnerable
+```
+Select Test Type
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-# Build
-cargo build-sbf
-
-# Run all exploit tests
-cargo test -- --nocapture
-
-# Run specific exploit
-cargo test exploit_double_take -- --nocapture
+  1 │ Run Secure Tests         (5 tests)
+  2 │ Run Exploit Tests        (7 tests)
+  3 │ Run Both                 (12 tests total)
+  ──┼────────────────────────────────────────────────────────
+  0 │ Back to Main Menu
 ```
 
-Available exploit tests:
-- `exploit_double_take` - Missing active state check
-- `exploit_fake_offer` - Anyone can create offer
-- `exploit_missing_signer` - Missing signer validation
-- `exploit_wrong_proposer` - Proposer validation bypass
+### **Build Menu**
+
+```
+Select Program to Build
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1 │ Multisig     Secure      programs/multisig/m-secure
+  2 │ Multisig     Vulnerable  programs/multisig/m-vulnerable
+  3 │ Governance   Secure      programs/governance/g-secure
+  4 │ Governance   Vulnerable  programs/governance/g-vulnerable
+  5 │ AMM          Secure      programs/amm/amm-secure
+  6 │ AMM          Vulnerable  programs/amm/amm-vulnerable
+  7 │ Escrow       Secure      programs/pino-escrow/p-secure
+  8 │ Escrow       Vulnerable  programs/pino-escrow/p-vulnerable
+  9 │ NFT Minting  Secure      programs/nfts/n-secure
+  10│ NFT Minting  Vulnerable  programs/nfts/n-vulnerable
+  ──┼────────────────────────────────────────────────────────
+  A │ Build All Programs      Sequential build (10 programs)
+```
 
 ---
 
-### Multisig
+## **Manual Testing**
 
-#### Secure Version
+If you prefer manual testing, use the commands below.
+
+### **Prerequisites**
+
 ```bash
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Install Solana CLI
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+
+# Install Anchor CLI (for Anchor programs)
+cargo install --git https://github.com/coral-xyz/anchor avm --force
+avm install latest
+avm use latest
+```
+
+---
+
+### **Multisig (Anchor)**
+
+```bash
+# Build
+cd programs/multisig/m-secure && cargo build-sbf
+cd ../m-vulnerable && cargo build-sbf
+
+# Test secure version (exploits prevented)
 cd programs/multisig/m-secure
+cargo test-sbf -- --nocapture
 
-# Build
-cargo build-sbf
-
-# Run all tests
-cargo test -- --nocapture
-
-# Run specific test
-cargo test test_full_governance_flow -- --nocapture
-```
-
-Available secure tests (14 total):
-- `test_create_multisig` - Create multisig
-- `test_full_governance_flow` - Complete governance
-- `test_transfer_proposal_flow` - SOL transfers
-- `test_remove_member` - Member removal
-- `test_change_timelock` - Timelock changes
-- `test_toggle_pause` - Pause mechanism
-- `test_non_admin_cannot_pause` - Admin-only pause
-- `test_timelock_enforcement` - Timelock validation
-- `test_threshold_enforcement` - Threshold validation
-- `test_double_approval_prevention` - Bitmap checks
-- `test_role_based_access_control` - RBAC
-- `test_non_member_cannot_approve` - Member validation
-- `test_cannot_remove_creator` - Creator protection
-- `test_cancel_proposal` - Proposal cancellation
-
-#### Vulnerable Version
-```bash
+# Test vulnerable version (attacks succeed)
 cd programs/multisig/m-vulnerable
-
-# Build
-cargo build-sbf
-
-# Run all exploit tests
-cargo test -- --nocapture
-
-# Run specific exploit
-cargo test exploit_threshold_bypass -- --nocapture
+cargo test-sbf -- --nocapture
 ```
 
-Available exploit tests (5 total):
-- `exploit_threshold_bypass` - Execute with insufficient approvals (V002)
-- `exploit_recipient_substitution` - Redirect funds to attacker (V004)
-- `exploit_double_approval` - Same member approves multiple times (V005)
-- `exploit_unauthorized_pause` - Non-admin pauses multisig (V013)
-- `exploit_timelock_bypass` - Execute before timelock expires (V003)
+**Test Count:** 4 secure + 4 exploit tests
 
 ---
 
-### NFT Staking
+### **Governance (Anchor)**
 
-#### Secure Version
 ```bash
+# Build
+cd programs/governance/g-secure && cargo build-sbf
+cd ../g-vulnerable && cargo build-sbf
+
+# Test secure version (exploits prevented)
+cd programs/governance/g-secure
+cargo test-sbf -- --nocapture
+
+# Test vulnerable version (attacks succeed)
+cd programs/governance/g-vulnerable
+cargo test-sbf -- --nocapture
+```
+
+**Test Count:** 5 secure + 6 exploit tests
+
+**Key Exploits Demonstrated:**
+- No minimum stake enforcement (sybil attacks)
+- Self-voting (reputation inflation)
+- No cooldown enforcement (spam voting)
+- Member downvote capability (grief attacks)
+- Vote weight truncation (precision loss)
+- Unlimited negative reputation
+
+---
+
+### **AMM (Anchor)**
+
+```bash
+# Build
+cd programs/amm/amm-secure && cargo build-sbf
+cd ../amm-vulnerable && cargo build-sbf
+
+# Test secure version (exploits prevented)
+cd programs/amm/amm-secure
+cargo test-sbf -- --nocapture
+
+# Test vulnerable version (attacks succeed)
+cd programs/amm/amm-vulnerable
+cargo test-sbf -- --nocapture
+```
+
+**Test Count:** 5 secure + 7 exploit tests
+
+**Key Exploits Demonstrated:**
+- Excessive fee extraction
+- Deposit front-running (sandwich attacks)
+- Inflation attacks (low MINIMUM_LIQUIDITY)
+- Unauthorized pool locking (DoS)
+- Stale transaction execution
+- No slippage protection
+
+---
+
+### **Escrow (Pinocchio)**
+
+```bash
+# Build
+cd programs/pino-escrow/p-secure && cargo build
+cd ../p-vulnerable && cargo build
+
+# Test secure version
+cd programs/pino-escrow/p-secure
+cargo test -- --nocapture
+
+# Test vulnerable version
+cd programs/pino-escrow/p-vulnerable
+cargo test -- --nocapture
+```
+
+**Test Count:** TBD
+
+---
+
+### **NFT Minting (Anchor + Metaplex Core)**
+
+```bash
+# Build
+cd programs/nfts/n-secure && cargo build-sbf
+cd ../n-vulnerable && cargo build-sbf
+
+# Test secure version
 cd programs/nfts/n-secure
+cargo test-sbf -- --nocapture
 
-# Build
-cargo build-sbf
-
-# Run all tests
-cargo test -- --nocapture
-```
-
-#### Vulnerable Version
-```bash
+# Test vulnerable version
 cd programs/nfts/n-vulnerable
+cargo test-sbf -- --nocapture
+```
 
-# Build
-cargo build-sbf
+**Test Count:** TBD
 
-# Run all exploit tests
-cargo test -- --nocapture
+---
+
+## **Understanding Test Output**
+
+### **Secure Tests (Exploits Prevented)**
+
+```
+✓ test_stake_tokens
+  [SETUP] Creates DAO, initializes treasury, stakes tokens
+  [VERIFY] Minimum stake requirement enforced (100,000 tokens)
+  [VERIFY] Stake amount correctly updated in user profile
+  [RESULT] ✓ PASS - Security checks prevented unauthorized action
+```
+
+### **Vulnerable Tests (Attacks Succeed)**
+
+```
+✓ test_exploit_no_minimum_stake
+  [SETUP] Creates DAO and user profile
+  [EXPLOIT STEP 1] Attacker stakes only 1 token (should require 100,000)
+  [EXPLOIT STEP 2] Transaction succeeds - no minimum stake check
+  [RESULT] ✓ VULNERABLE - Attack succeeded
+  [IMPACT] Attacker gains voting rights with minimal economic stake
+  [IMPACT] Enables sybil attacks (1000 accounts = only 1000 tokens)
+  [LESSON] Always enforce minimum stake requirements
 ```
 
 ---
 
-## Test Runner Features
+## **Test Structure**
 
-### Main Menu
-```
-Soteria Security Test Runner
-========================================
+All tests follow this pattern:
 
-Select a program to test:
-1. Pino Escrow
-2. Multisig
-3. NFTs (Staking)
-4. Run all programs
-5. Build all programs
-0. Exit
-```
+```rust
+#[test]
+fn test_exploit_name() {
+    // SETUP: Create test environment
+    let (svm, accounts) = setup_test();
 
-### Version Selection
-```
-Select version:
-1. Secure version
-2. Vulnerable version
-3. Both versions
-0. Back to main menu
-```
+    // EXPLOIT: Execute attack
+    let result = execute_attack(&mut svm, &accounts);
 
-### Test Type Selection
-```
-How would you like to run the tests?
-1. Run all tests
-2. Run specific test
-0. Back
-```
+    // VERIFY: Confirm outcome
+    assert!(result.is_ok()); // Vulnerable version
+    // assert!(result.is_err()); // Secure version
 
-When selecting "Run specific test", you'll see a numbered list of available tests to choose from.
+    // IMPACT: Document consequences
+    println!("[IMPACT] Attacker can...");
+
+    // LESSON: Explain prevention
+    println!("[LESSON] Always validate...");
+}
+```
 
 ---
 
-## Understanding Test Output
+## **Running All Tests**
 
-### Secure Tests
-Secure tests validate that security checks work correctly:
-- **PASS** - Security check prevented unauthorized action
-- **FAIL** - Security check failed or missing
-
-### Vulnerable/Exploit Tests
-Exploit tests demonstrate vulnerabilities:
-- **VULNERABLE** - Exploit succeeded (demonstrates the vulnerability)
-- **PROTECTED** - Exploit failed (vulnerability was fixed)
-
----
-
-## Continuous Integration
-
-To run all tests in CI:
+### **Via Test Runner (Recommended)**
 
 ```bash
-# Build all programs
-./test-runner.sh # Select option 5
-
-# Run all tests
-./test-runner.sh # Select option 4
+./test-runner.sh
+# Select option 6: "Run All Tests"
 ```
 
-Or manually:
+### **Via Script**
+
 ```bash
-# Run all tests for all programs
+# If you have a run_all_tests.sh script
+./scripts/run_tests.sh
+```
+
+### **Manually**
+
+```bash
+# From repository root
+cd programs/multisig/m-secure && cargo test-sbf -- --nocapture && cd -
+cd programs/multisig/m-vulnerable && cargo test-sbf -- --nocapture && cd -
+cd programs/governance/g-secure && cargo test-sbf -- --nocapture && cd -
+cd programs/governance/g-vulnerable && cargo test-sbf -- --nocapture && cd -
+cd programs/amm/amm-secure && cargo test-sbf -- --nocapture && cd -
+cd programs/amm/amm-vulnerable && cargo test-sbf -- --nocapture && cd -
 cd programs/pino-escrow/p-secure && cargo test -- --nocapture && cd -
 cd programs/pino-escrow/p-vulnerable && cargo test -- --nocapture && cd -
-cd programs/multisig/m-secure && cargo test -- --nocapture && cd -
-cd programs/multisig/m-vulnerable && cargo test -- --nocapture && cd -
-cd programs/nfts/n-secure && cargo test -- --nocapture && cd -
-cd programs/nfts/n-vulnerable && cargo test -- --nocapture && cd -
+cd programs/nfts/n-secure && cargo test-sbf -- --nocapture && cd -
+cd programs/nfts/n-vulnerable && cargo test-sbf -- --nocapture && cd -
 ```
 
 ---
 
-## Troubleshooting
+## **Troubleshooting**
 
-### "cargo: command not found"
+### **"cargo: command not found"**
+
 Install Rust and Cargo:
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
 ```
 
-### "cargo build-sbf: command not found"
-Install Solana CLI tools:
+### **"cargo build-sbf: command not found"**
+
+Install Solana CLI:
 ```bash
-sh -c "$(curl -sSfL https://release.solana.com/stable/install)"
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 ```
 
-### Tests fail with "program not found"
+### **"anchor: command not found"**
+
+Install Anchor CLI:
+```bash
+cargo install --git https://github.com/coral-xyz/anchor avm --force
+avm install latest
+avm use latest
+```
+
+### **Tests fail with "program not found"**
+
 Build the program first:
 ```bash
-cargo build-sbf
+cargo build-sbf  # For Anchor programs
+cargo build      # For Pinocchio programs
 ```
 
-### Permission denied on test-runner.sh
+### **Permission denied: ./test-runner.sh**
+
 Make it executable:
 ```bash
 chmod +x test-runner.sh
 ```
 
+### **Tests timeout or hang**
+
+LiteSVM tests should run quickly. If tests hang:
+- Ensure program is built with `cargo build-sbf`
+- Check for infinite loops in test code
+- Try running with `RUST_LOG=debug` for more output
+
 ---
 
-## Next Steps
+## **Continuous Integration**
 
-- Read `VULNERABILITIES.md` in each vulnerable program directory for detailed exploit documentation
-- Read `README.md` in each program directory for architecture details
-- Check individual test files for inline security annotations
+For CI/CD pipelines:
+
+```yaml
+# Example GitHub Actions workflow
+- name: Build All Programs
+  run: |
+    cd programs/multisig/m-secure && cargo build-sbf
+    cd ../m-vulnerable && cargo build-sbf
+    cd ../../governance/g-secure && cargo build-sbf
+    cd ../g-vulnerable && cargo build-sbf
+    cd ../../amm/amm-secure && cargo build-sbf
+    cd ../amm-vulnerable && cargo build-sbf
+
+- name: Run All Tests
+  run: |
+    cd programs/multisig/m-secure && cargo test-sbf
+    cd ../m-vulnerable && cargo test-sbf
+    cd ../../governance/g-secure && cargo test-sbf
+    cd ../g-vulnerable && cargo test-sbf
+    cd ../../amm/amm-secure && cargo test-sbf
+    cd ../amm-vulnerable && cargo test-sbf
+```
 
 ---
 
-## Quick Reference
+## **Test Coverage Summary**
+
+| Program | Secure Tests | Exploit Tests | Total |
+|---------|--------------|---------------|-------|
+| Multisig | 4 | 4 | 8 |
+| Governance | 5 | 6 | 11 |
+| AMM | 5 | 7 | 12 |
+| Escrow | TBD | TBD | TBD |
+| NFT Minting | TBD | TBD | TBD |
+| **Total** | **14+** | **17+** | **31+** |
+
+---
+
+## **Next Steps**
+
+After running tests:
+
+1. **Read VULNERABILITIES.md** in each vulnerable program directory
+2. **Compare implementations** side-by-side (secure vs vulnerable)
+3. **Study exploit tests** to understand attack vectors
+4. **Review program READMEs** for architecture details
+5. **Experiment** by modifying code and observing test outcomes
+
+---
+
+## **Quick Reference**
 
 | Command | Description |
 |---------|-------------|
-| `./test-runner.sh` | Interactive test runner (Bash) |
-| `python3 test-runner.py` | Interactive test runner (Python) |
-| `cargo test` | Run all tests in current directory |
-| `cargo test <name>` | Run specific test |
-| `cargo build-sbf` | Build Solana program |
+| `./test-runner.sh` | Launch interactive test runner |
+| `cargo test-sbf` | Run Anchor program tests |
+| `cargo test` | Run Pinocchio program tests |
 | `cargo test -- --nocapture` | Run tests with output |
-| `cargo test -- --list` | List available tests |
+| `cargo test <name>` | Run specific test |
+| `cargo build-sbf` | Build Anchor program |
+| `cargo build` | Build Pinocchio program |
 
 ---
 
-Happy testing!
+**Need Help?** Check individual program README.md files or examine test source code for detailed examples.

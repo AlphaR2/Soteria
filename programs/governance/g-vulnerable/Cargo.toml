@@ -21,7 +21,18 @@ custom-panic = []
 
 
 [dependencies]
-anchor-lang = "0.32.1"
+anchor-lang.workspace = true
+anchor-spl.workspace = true
+spl-associated-token-account.workspace = true
+
+[dev-dependencies]
+litesvm.workspace = true
+litesvm-token.workspace = true
+solana-sdk.workspace = true
+sha2.workspace = true
+solana-system-interface.workspace = true
+spl-token.workspace = true
+spl-associated-token-account.workspace = true
 
 
 [lints.rust]

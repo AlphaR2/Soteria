@@ -169,14 +169,14 @@ All vulnerabilities exist in the code. Some attacks are caught by Solana runtime
 Build the programs first:
 
 ```bash
-cd programs/pino-escrow/secure && cargo build-sbf
-cd programs/pino-escrow/vulnerable && cargo build-sbf
+cd programs/pino-escrow/p-secure && cargo build-sbf
+cd programs/pino-escrow/p-vulnerable && cargo build-sbf
 ```
 
 ### Secure Tests
 
 ```bash
-cd programs/pino-escrow/secure
+cd programs/pino-escrow/p-secure
 
 # Run all tests with output
 cargo test -- --nocapture
@@ -216,23 +216,3 @@ Anchor abstracts away many security checks. Pinocchio forces you to write them m
 | Auto 8-byte discriminator | Manual discriminator check |
 | `seeds`, `bump` constraints | Manual `find_program_address` |
 | Auto deserialization | Manual `from_bytes` |
-
-### PDA and Vault
-
-- Offer PDA: `["offer", maker_pubkey, offer_id]`
-- Vault: ATA of the offer PDA for Token A
-- PDA signs transfers using `invoke_signed` with seeds
-
----
-
-## Resources
-
-- [Pinocchio GitHub](https://github.com/anza-xyz/pinocchio)
-- [Solana Program Security Guide](https://www.helius.dev/blog/a-hitchhikers-guide-to-solana-program-security)
-- [Sec3 2025 Security Report](https://solanasec25.sec3.dev/)
-
----
-
-## License
-
-MIT

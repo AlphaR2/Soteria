@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-g_secure = "9UC6cDrdT2VRG6BjVX62xpfif4dXzdVhwRZBLVJScmVn"
+g_secure = "5TwUNSWhJ4AwYNnaP5APZyxBXW4usurdbfkCQCCRfAMP"
 
 [registry]
 url = "https://api.apr.dev"

@@ -19,16 +19,20 @@ anchor-debug = []
 custom-heap = []
 custom-panic = []
 
+
 [dependencies]
 anchor-lang.workspace = true
 anchor-spl.workspace = true
 constant-product-curve.workspace = true
+spl-associated-token-account.workspace = true
+spl-token.workspace = true
 
 [dev-dependencies]
 litesvm.workspace = true
 litesvm-token.workspace = true
 solana-sdk.workspace = true
 borsh.workspace = true
+solana-system-interface.workspace = true
 
 [lints]
 workspace = true

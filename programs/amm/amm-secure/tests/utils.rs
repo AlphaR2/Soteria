@@ -2,6 +2,7 @@
 
 use litesvm::LiteSVM;
 use solana_sdk::{
+    hash::hash,
     instruction::{AccountMeta, Instruction},
     pubkey::Pubkey,
     signature::{Keypair, Signer},
@@ -10,6 +11,16 @@ use spl_associated_token_account::get_associated_token_address;
 
 // Program ID matching declare_id!
 pub const AMM_PROGRAM_ID: Pubkey = Pubkey::new_from_array(amm_secure::ID.to_bytes());
+
+// Build Anchor instruction discriminator
+// Formula: first 8 bytes of sha256("global:method_name")
+pub fn anchor_discriminator(method: &str) -> [u8; 8] {
+    let preimage = format!("global:{}", method);
+    let hash_result = hash(preimage.as_bytes());
+    let mut discriminator = [0u8; 8];
+    discriminator.copy_from_slice(&hash_result.to_bytes()[..8]);
+    discriminator
+}
 
 // Standard program IDs
 pub const TOKEN_PROGRAM_ID: Pubkey = spl_token::ID;
@@ -28,7 +39,7 @@ pub const DECIMALS: u8 = 9;
 pub fn setup_svm() -> LiteSVM {
     let mut svm = LiteSVM::new();
     let program_bytes = include_bytes!("../target/deploy/amm_secure.so");
-    svm.add_program(AMM_PROGRAM_ID, program_bytes);
+    let _ = svm.add_program(AMM_PROGRAM_ID, program_bytes);
     svm
 }
 
@@ -82,7 +93,7 @@ pub fn build_initialize_pool_ix(
     let token_b_vault = get_associated_token_address(&pool_authority, token_b_mint);
 
     // Discriminator for initialize_pool
-    let discriminator: [u8; 8] = [95, 180, 10, 172, 84, 174, 232, 40];
+    let discriminator = anchor_discriminator("initialize_pool");
 
     let mut data = discriminator.to_vec();
     data.extend_from_slice(&fee_basis_points.to_le_bytes());
@@ -128,7 +139,7 @@ pub fn build_deposit_liquidity_ix(
     let token_b_vault = get_associated_token_address(&pool_authority, token_b_mint);
 
     // Discriminator for deposit_liquidity
-    let discriminator: [u8; 8] = [242, 35, 198, 137, 82, 225, 242, 182];
+    let discriminator = anchor_discriminator("deposit_liquidity");
 
     let mut data = discriminator.to_vec();
     data.extend_from_slice(&desired_amount_a.to_le_bytes());
@@ -180,7 +191,7 @@ pub fn build_withdraw_liquidity_ix(
     let token_b_vault = get_associated_token_address(&pool_authority, token_b_mint);
 
     // Discriminator for withdraw_liquidity
-    let discriminator: [u8; 8] = [183, 18, 70, 156, 148, 109, 161, 34];
+    let discriminator = anchor_discriminator("withdraw_liquidity");
 
     let mut data = discriminator.to_vec();
     data.extend_from_slice(&lp_tokens_to_burn.to_le_bytes());
@@ -229,7 +240,7 @@ pub fn build_swap_tokens_ix(
     let token_b_vault = get_associated_token_address(&pool_authority, token_b_mint);
 
     // Discriminator for swap_tokens
-    let discriminator: [u8; 8] = [248, 198, 158, 145, 225, 117, 135, 200];
+    let discriminator = anchor_discriminator("swap_tokens");
 
     let mut data = discriminator.to_vec();
     data.push(if swap_token_a_for_b { 1 } else { 0 });
@@ -266,7 +277,7 @@ pub fn build_lock_pool_ix(
     let (pool_config, _) = derive_pool_config_pda(token_a_mint, token_b_mint);
 
     // Discriminator for lock_pool
-    let discriminator: [u8; 8] = [86, 150, 198, 154, 156, 69, 8, 158];
+    let discriminator = anchor_discriminator("lock_pool");
 
     Instruction {
         program_id: AMM_PROGRAM_ID,
@@ -287,7 +298,7 @@ pub fn build_unlock_pool_ix(
     let (pool_config, _) = derive_pool_config_pda(token_a_mint, token_b_mint);
 
     // Discriminator for unlock_pool
-    let discriminator: [u8; 8] = [105, 61, 85, 152, 112, 159, 176, 109];
+    let discriminator = anchor_discriminator("unlock_pool");
 
     Instruction {
         program_id: AMM_PROGRAM_ID,
