@@ -167,8 +167,8 @@ Each program directory contains:
 | **Multisig** | Anchor | 4 Critical | 4 secure + 4 exploit |
 | **Governance** | Anchor | 6 Critical, 3 High, 2 Medium | 5 secure + 6 exploit |
 | **AMM** | Anchor | 9 Critical, 2 High, 3 Medium | 5 secure + 7 exploit |
-| **Escrow** | Pinocchio | TBD | TBD |
-| **NFT Minting** | Anchor + Metaplex | TBD | TBD |
+| **Escrow** | Pinocchio | 4 | 3 |
+| **NFT Minting** | Anchor + Metaplex | 5 |  5 |
 
 **See individual program READMEs for:**
 - Detailed vulnerability documentation
@@ -227,18 +227,6 @@ Run tests via the interactive test runner (recommended) or manually from program
 
 ---
 
-
-## **Additional Resources**
-
-- [Solana Documentation](https://docs.solana.com/)
-- [Anchor Book](https://book.anchor-lang.com/)
-- [Neodyme Security Blog](https://blog.neodyme.io/)
-- [Solana Security Best Practices](https://github.com/slowmist/solana-smart-contract-security-best-practices)
-- [LiteSVM Testing](https://github.com/LiteSVM/litesvm)
-
----
-
-
 ## **Disclaimer**
 
 **WARNING:** These programs contain **intentionally vulnerable** code for educational purposes.
@@ -254,7 +242,7 @@ Run tests via the interactive test runner (recommended) or manually from program
 
 ## **License**
 
-Educational use only. Not intended for production deployment.
+Example and Educational use only. Not intended for production deployment.
 
 ---
 
