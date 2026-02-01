@@ -237,13 +237,4 @@ Run tests via the interactive test runner (recommended) or manually from program
 - Always perform thorough audits before mainnet deployment
 
 **This repository is for learning and security education only.**
-
----
-
-## **License**
-
-Example and Educational use only. Not intended for production deployment.
-
----
-
 **Coming Next:** Lending Protocol • Staking • Oracle • More governance patterns
