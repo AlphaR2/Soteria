@@ -2,6 +2,7 @@
 
 Learn Solana security through **vulnerable** and **secure** implementations with real exploit demonstrations.
 
+
 ---
 
 ## **Overview**
@@ -15,6 +16,57 @@ Learn Solana security through **vulnerable** and **secure** implementations with
 5. **NFT Minting** (Anchor) - On-chain NFT minting with Metaplex Core
 
 Each program includes side-by-side secure/vulnerable implementations with comprehensive tests.
+
+---
+
+## **Quick Start**
+
+### **1. Clone the Repository**
+
+```bash
+git clone https://github.com/AlphaR2/Soteria.git
+cd Soteria
+```
+
+### **2. Install Prerequisites**
+
+```bash
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+# Install Solana CLI (v2.0+)
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+
+# Install Anchor CLI (v0.32.1+) - for Anchor programs
+cargo install --git https://github.com/coral-xyz/anchor avm --force
+avm install latest
+avm use latest
+```
+
+### **3. Run the Interactive Test Runner**
+
+```bash
+# Make executable (first time only)
+chmod +x test-runner.sh
+
+# Launch interactive menu
+./test-runner.sh
+```
+
+**The test runner provides:**
+- Build all programs or individual versions
+- Run secure tests (exploits prevented)
+- Run exploit tests (attacks succeed)
+- Execute all test suites sequentially
+- Color-coded output with progress indicators
+
+### **4. Explore Programs**
+
+Each program directory contains:
+- `README.md` - Architecture, vulnerabilities, attack scenarios
+- `VULNERABILITIES.md` - Detailed security analysis
+- `TESTING.md` - Testing guide and examples
+- Side-by-side secure/vulnerable implementations
 
 ---
 
@@ -106,57 +158,6 @@ Soteria/
 │
 └── README.md                     # This file
 ```
-
----
-
-## **Quick Start**
-
-### **1. Clone the Repository**
-
-```bash
-git clone https://github.com/AlphaR2/Soteria.git
-cd Soteria
-```
-
-### **2. Install Prerequisites**
-
-```bash
-# Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-# Install Solana CLI (v2.0+)
-sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
-
-# Install Anchor CLI (v0.32.1+) - for Anchor programs
-cargo install --git https://github.com/coral-xyz/anchor avm --force
-avm install latest
-avm use latest
-```
-
-### **3. Run the Interactive Test Runner**
-
-```bash
-# Make executable (first time only)
-chmod +x test-runner.sh
-
-# Launch interactive menu
-./test-runner.sh
-```
-
-**The test runner provides:**
-- Build all programs or individual versions
-- Run secure tests (exploits prevented)
-- Run exploit tests (attacks succeed)
-- Execute all test suites sequentially
-- Color-coded output with progress indicators
-
-### **4. Explore Programs**
-
-Each program directory contains:
-- `README.md` - Architecture, vulnerabilities, attack scenarios
-- `VULNERABILITIES.md` - Detailed security analysis
-- `TESTING.md` - Testing guide and examples
-- Side-by-side secure/vulnerable implementations
 
 ---
 
